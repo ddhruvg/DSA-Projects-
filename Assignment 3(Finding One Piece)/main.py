@@ -104,3 +104,7 @@ if __name__ == '__main__':
     parser = ParserTreasure('tc_treasury2.txt')
     parser.parse()
     print()
+    print("----------custom.txt----------")
+    parser = ParserTreasure('custom.txt')
+    parser.parse()
+    print()

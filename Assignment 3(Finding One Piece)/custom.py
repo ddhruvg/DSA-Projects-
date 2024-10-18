@@ -49,7 +49,7 @@ class StrawHatTreasury:
         # Write your code here
         self.current_time = treasure.arrival_time # updating the current time
         target_crewmate = self.crewmate_heap.extract() # extracting the target cremate from heap
-        print(f"####......{target_crewmate.load}.....####")
+
         # updating working time of target_cremate
         if target_crewmate.starting_time == 0:
             target_crewmate.starting_time = self.current_time 
@@ -84,8 +84,12 @@ class StrawHatTreasury:
         for crew_mate in self.working_crewmate:
 
             treasure_heap = heap.Heap(self.comparison_treasure,[])
-
-            for treasure_ in crew_mate.treasure:
+            deepcopy_treasure = []
+            for temp in crew_mate.treasure:
+                trea = treasure.Treasure(temp.id,temp.size,temp.arrival_time)
+                trea.completion_time = temp.completion_time
+                deepcopy_treasure.append(trea)
+            for treasure_ in deepcopy_treasure:
                 treasure_.completion_time = treasure_.arrival_time
                 if not treasure_heap.top():
                     treasure_heap.insert(treasure_)
@@ -103,8 +107,7 @@ class StrawHatTreasury:
                             prev_completion_time = top_treasure.completion_time
 
                             extracted_treasure = treasure_heap.extract()
-                            self.completed_treasures.append(extracted_treasure)
-                            crew_mate.treasure.remove(extracted_treasure)
+                            ans.append(extracted_treasure)
                             top_treasure = treasure_heap.top()
 
                         if top_treasure and treasure_.arrival_time-prev_completion_time < top_treasure.size:  
@@ -122,9 +125,9 @@ class StrawHatTreasury:
                 else:
                     extracted_treasure.completion_time = prev_completion_time + extracted_treasure.size
                     prev_completion_time = extracted_treasure.completion_time
-                new_treasure = treasure.Treasure(extracted_treasure.id,extracted_treasure.size,extracted_treasure.arrival_time)      
-                new_treasure.completion_time = extracted_treasure.completion_time
-                ans.append(new_treasure)
+
+                ans.append(extracted_treasure)
+
         for completed_treasures in self.completed_treasures:
             ans.append(completed_treasures)
         ans.sort(key=lambda x: x.id)
@@ -142,7 +145,7 @@ class StrawHatTreasury:
             return 0  
           
     def comparison_crewmate(self,crewmate1,crewemate2):
-        return self.get_load(crewmate1) < self.get_load(crewemate2)
+        return self.get_load(crewmate1) <= self.get_load(crewemate2)
         
     def comparison_treasure(self,treasure1,treasure2):
         # wait_time = self.current_time - treasure.arrival_time
@@ -152,8 +155,7 @@ class StrawHatTreasury:
         #priority = treasure.size - wait_time
         priority1 = treasure1.size - wait_time1
         priority2 = treasure2.size - wait_time2
-        if treasure1.id == 1001 or treasure2.id == 1001:
-            print(priority1,priority2)
+  
         if priority1 == priority2:
             return treasure1.id < treasure2.id
         return priority1 < priority2
