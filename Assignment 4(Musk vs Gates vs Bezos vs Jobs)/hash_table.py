@@ -13,6 +13,7 @@ class HashTable:
         self.elements = 0
         self.table_size = params[-1]
         self.table = [None]*self.table_size
+        
         pass
     def insert(self, x):
         key = x
@@ -23,10 +24,13 @@ class HashTable:
         if self.collision_type == "Chain":
             if self.table[idx] == None:
                 self.table[idx] = [key]
+                
             else:
                 self.table[idx].append(key)
+                
         else:
             self.table[idx] = key
+               
         self.elements += 1          
         
     
@@ -68,24 +72,29 @@ class HashTable:
                 else:    
                     ans += "<EMPTY>" + " | "
                     
-        return ans 
+        return ans[:-2]
     
     def ord_value(self,s):
+        l = ["0","1","2","3","4","5","6","7","8","9"]
+        if s in l:
+            return int(s)
         if s.lower() == s:
-            return ord(s) - 96
+            return ord(s) - 97
         else:
-            return ord(s) - 64
+            return ord(s) - 65 + 26
         
     def polynomial_accumulation(self,s,z):
         result = self.ord_value(s[len(s)-1])
         for i in range(len(s)-2,-1,-1):
             result = result * z + self.ord_value(s[i])
-        return result     
-        pass    
+        return result 
+ 
+
+    
     def double_hash(self,s,z2,c2):
-        new_hash = c2-self.polynomial_accumulation(s,z2)%c2
+        new_hash = c2-(self.polynomial_accumulation(s,z2)%c2)
         return new_hash
-        pass
+ 
 
     def hash(self,key):
         if self.collision_type == "Chain":
@@ -94,7 +103,7 @@ class HashTable:
             if self.table[target] == None:
                 return (True,target)
             else:
-                # print(self.table[target])
+
                 for i in range(len(self.table[target])):
                     if self.table[target][i] == key:
                         return (False,target)
@@ -107,11 +116,11 @@ class HashTable:
             while self.table[idx] != None:
                 
                 if self.table[idx] == key:
-                    # print("######......#####")
+ 
                     return (False,idx)
                 idx = (idx+1) % self.table_size
                 if idx == hash_value % self.table_size:
-                    # print(f"...........{self.table}..........")
+
                     raise Exception("Table is full")
                 
             return (True,idx)
@@ -236,5 +245,6 @@ class HashMap(HashTable):
                     ans += " |"
                 else:
                     ans += " <EMPTY> |"
-        ans = ans[:-1]            
-        return ans                                
+
+        ans = ans[:-1]
+        return ans

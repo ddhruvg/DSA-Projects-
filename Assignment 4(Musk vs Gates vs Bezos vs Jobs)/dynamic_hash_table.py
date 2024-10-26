@@ -7,7 +7,8 @@ class DynamicHashSet(HashSet):
         
     def rehash(self):
         # IMPLEMENT THIS FUNCTION
-        new_size = get_next_size(self.table_size)
+        new_size = get_next_size()
+        # print(f"**********{new_size}**********")
         new_params = list(self.params)
         new_params[-1] = new_size
         new_params = tuple(new_params)
@@ -39,7 +40,7 @@ class DynamicHashMap(HashMap):
         
     def rehash(self):
         # IMPLEMENT THIS FUNCTION
-        new_size = get_next_size(self.table_size)
+        new_size = get_next_size()
         new_params = list(self.params)
         new_params[-1] = new_size
         new_params = tuple(new_params)
