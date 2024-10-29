@@ -71,7 +71,7 @@ def MuskLibraryCheck(student_musk, model_musk):
 
 def JobsLibraryTest(book_titles, texts):
     print("Jobs Library")
-    jlib = JGBLibrary("Jobs", (30, 37))
+    jlib = JGBLibrary("Jobs", (30, 41))
     for book, text in zip(book_titles, texts):
         jlib.add_book(book, text)
     print(jlib.distinct_words("GameOfThrones"))
@@ -95,7 +95,7 @@ def GatesLibraryTest(book_titles, texts):
 
 def BezosLibraryTest(book_titles, texts):
     print("Bezos Library")
-    blib = JGBLibrary("Bezos", (40, 35, 17, 37))
+    blib = JGBLibrary("Bezos", (40, 35, 17, 43))
     for book, text in zip(book_titles, texts):
         blib.add_book(book, text)
     print(blib.distinct_words("TheChroniclesOfNarnia"))

@@ -66,6 +66,7 @@ def main():
     texts = [["The", "name", "of", "this", "book", "contains", "a", "number"],
              ["You", "can", "name", "this", "book", "anything"]]
 
+
     unique_words = []
 
     for text in texts:

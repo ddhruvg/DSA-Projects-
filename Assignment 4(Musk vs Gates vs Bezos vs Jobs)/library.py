@@ -36,11 +36,11 @@ class MuskLibrary(DigitalLibrary):
             mid = len(arr) // 2
 
             
-            left_half = merge_sort(arr[:mid])
-            right_half = merge_sort(arr[mid:])
+            left = merge_sort(arr[:mid])
+            right = merge_sort(arr[mid:])
 
             
-            return merge(left_half, right_half)
+            return merge(left, right)
 
         def merge(left, right):
             
@@ -241,9 +241,6 @@ class JGBLibrary(DigitalLibrary):
                             ans += " ; ".join(key)  + " | "
                         else:
                             ans += "<EMPTY>" + " | "
-                if len(ans) > 2:
-                    print(ans[:-2])
-                else:
-                    print(ans)
+                print(ans[:-2])
 
         pass
