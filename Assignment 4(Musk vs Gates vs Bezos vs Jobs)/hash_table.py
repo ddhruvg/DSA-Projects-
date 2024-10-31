@@ -62,23 +62,23 @@ class HashTable:
     def __str__(self):
         #considering a hash set 
         if self.collision_type == "Chain":
-            ans = ""
+            ans = []
             for i in range(self.table_size):
                 if self.table[i] is not None:
                     buffer = " ; ".join(self.table[i])
-                    ans = ans + buffer + " | "
+                    ans.append(buffer)
                 else:    
-                    ans += "<EMPTY>" + " | "
+                    ans.append("<EMPTY>")
              
         else:
-            ans = ""
+            ans = []
             for i in range(self.table_size):
                 if self.table[i] is not None:
-                    ans = ans + self.table[i] + " | "
+                    ans.append(self.table[i])
                 else:    
-                    ans += "<EMPTY>" + " | "
+                    ans.append("<EMPTY>")
                     
-        return ans[:-2]
+        return " | ".join(ans)
     
     def ord_value(self,s):
         l = ["0","1","2","3","4","5","6","7","8","9"]
@@ -234,24 +234,23 @@ class HashMap(HashTable):
     
     def __str__(self):
         if self.collision_type == "Chain":
-            ans = ""
+            ans = []
             for i in range(self.table_size):
                 if self.table[i] is not None:
+                    ans1 = []
                     for j in range(len(self.table[i])):
-                        ans += f" ({self.table[i][j]} , {self.value_table[i][j]}) ;"
-                    ans = ans[:-1]
-                    ans += " |"
+                        ans1.append( f"({self.table[i][j]} , {self.value_table[i][j]})")
+                    ans.append(" ; ".join(ans1))    
                 else:
-                    ans += " <EMPTY> |"   
+                    ans.append("<EMPTY>")   
         else:
-            ans = ""
+            ans = []
             for i in range(self.table_size):
                 if self.table[i] is not None:
-                    ans += f" ({self.table[i]} , {self.value_table[i]}) ;"
-                    ans = ans[:-1]
-                    ans += " |"
+                    ans.append(f"({self.table[i]} , {self.value_table[i]})")
+                    
                 else:
                     ans += " <EMPTY> |"
 
-        ans = ans[:-1]
-        return ans
+        
+        return " | ".join(ans)

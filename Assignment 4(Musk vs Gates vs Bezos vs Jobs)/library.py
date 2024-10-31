@@ -222,25 +222,26 @@ class JGBLibrary(DigitalLibrary):
         
 
         for book in self.added_books:
-            ans = ""
+            ans =""
             if book is not None:
 
                 ans = book + ": "
                 value_set = self.book_map.find(book)
 
                 if self.collision_type != "Chain":
-                    
+                    ans1 = []
                     for key in value_set.table:
                         if key is not None:
-                            ans += key + " | "
+                            ans1.append(key)
                         else:
-                            ans += "<EMPTY>" + " | "
+                            ans1.append("<EMPTY>")
                 else:
+                    ans1 = []
                     for key in value_set.table:
                         if key is not None:
-                            ans += " ; ".join(key)  + " | "
+                            ans1.append(" ; ".join(key))
                         else:
-                            ans += "<EMPTY>" + " | "
-                print(ans[:-2])
+                            ans1.append("<EMPTY>")
+                print(ans + " | ".join(ans1))
 
-        pass
+        
