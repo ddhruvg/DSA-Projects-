@@ -53,7 +53,7 @@ class DynamicHashMap(HashMap):
         else:
             for i in range(len(self.table)):
                 if self.table[i] != None:
-                    new_hashmap.insert(self.table[i],self.value_table[i]) 
+                    new_hashmap.insert((self.table[i],self.value_table[i])) 
         self.table_size = new_size
         self.table = new_hashmap.table
         self.value_table = new_hashmap.value_table

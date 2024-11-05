@@ -1,6 +1,4 @@
-
 import time
-
 import library
 import hash_table
 from prime_generator import set_primes
@@ -34,6 +32,7 @@ def check_lib(lib, unique_words, word_to_books, sort_output=True):
         print("SEARCH KEYWORD CORRECT!")
     else:
         print("SEARCH KEYWORD FAILED!")
+    lib.print_books()    
     print("\n\n")
 
 

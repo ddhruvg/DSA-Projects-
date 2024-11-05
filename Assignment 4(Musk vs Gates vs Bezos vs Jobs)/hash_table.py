@@ -16,8 +16,7 @@ class HashTable:
         
         pass
     def insert(self, x):
-        if x.strip() == "":
-            return  
+
         key = x
         flag,idx = self.hash(key)
         if not flag:
@@ -37,8 +36,7 @@ class HashTable:
         
     
     def find(self, key):
-        if key.strip() == "":
-            return (False,None)
+
         flag,idx = self.hash(key)
       
         
@@ -50,8 +48,7 @@ class HashTable:
 
     
     def get_slot(self, key):
-        if key.strip() == "":
-            return None
+
         return self.polynomial_accumulation(key,self.params[0]) % self.table_size
         
     
