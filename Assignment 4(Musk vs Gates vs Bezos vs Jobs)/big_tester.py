@@ -158,10 +158,10 @@ def test_digital_library():
 
 if __name__ == "__main__":
     
-    # test_hash_set()
-    # test_hash_map()
-    # test_dynamic_hash_set()
-    # test_dynamic_hash_map()
+    test_hash_set()
+    test_hash_map()
+    test_dynamic_hash_set()
+    test_dynamic_hash_map()
     test_digital_library()
     print("All rigorous tests completed successfully.")
     # print(f"Total time taken: {time.time() - start:.2f}")
