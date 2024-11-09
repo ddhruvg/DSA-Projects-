@@ -1,14 +1,9 @@
-
-'''
-Python Code to implement a heap with general comparison function
-'''
-#pass comparison fucntion along with the intialisation on heap object 
 class Heap:
     '''
     Class to implement a heap with general comparison function
     '''
     
-    def __init__(self, comparison_function, init_array):
+    def __init__(self, init_array):
         '''
         Arguments:
             comparison_function : function : A function that takes in two arguments and returns a boolean value
@@ -25,7 +20,7 @@ class Heap:
             O(n) where n is the number of elements in init_array
         '''
         # Write your code here
-        self.compariosn_function = comparison_function
+        self.compariosn_function = comparison
         self.heap = init_array
         self.heapify()
         pass
@@ -128,6 +123,28 @@ class Heap:
         # self.heap = arr[:]
         for i in range(len(self.heap)//2-1,-1,-1):
             self.downheap(i)
+    def is_empty(self):
+        return len(self.heap) == 0       
         
+class Queue:
+    def __init__(self):
+        self.queue = []
+        self.index = 0 
+
+    def append(self, value):
+        self.queue.append(value)
+    def pop(self):
+        if self.index <len(self.queue):
+            ans = self.queue[self.index]
+            self.index+=1
+            return ans
+        return None
+    def is_empty(self):
+        return self.index == len(self.queue)
+    def top(self):
+        if self.index < len(self.queue):
+            return self.queue[self.index]
+        return None               
     
-    # You can add more functions if you want to
+def comparison(a,b):
+    return a<b    
