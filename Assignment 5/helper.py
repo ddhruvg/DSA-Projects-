@@ -147,4 +147,4 @@ class Queue:
         return None               
     
 def comparison(a,b):
-    return a<b    
+    return a[0]<b[0]    

@@ -30,13 +30,31 @@ def main():
     # not be true in general
     if route1 == expected_route1:
         print("Task 1 PASSED")
+    else:
+        for ok in route1:
+            print(ok.flight_no)
+        print("__________________")
+        for ok  in expected_route1:
+            print(ok.flight_no) 
+
         
     if route2 == expected_route2:
         print("Task 2 PASSED")
+    else:
+        for ok in route2:
+            print(ok.flight_no)
+        print("__________________")
+        for ok  in expected_route2:
+            print(ok.flight_no)    
         
     if route3 == expected_route3:
         print("Task 3 PASSED")
-        
-
+    else:
+        for ok in route3:
+            print(ok.flight_no)
+        print("__________________")
+        for ok  in expected_route3:
+            print(ok.flight_no)    
+       
 if __name__ == "__main__":
     main()

@@ -13,6 +13,29 @@ class Planner:
         for flight in flights:
             idx = flight.start_city
             self.adj[idx].append(flight)
+        
+
+
+
+        """check for sorting"""  
+
+        # for i in range(self.m):
+        #     self.adj[i] = sorted(self.adj[i],key=lambda x : x.arrival_time)
+
+        # creating a graph of flights as a node 
+        self.flight_adj_pri = [None] * self.m
+        for flight in flights:
+            idx = flight.flight_no
+            self.flight_adj_pri[idx] = flight
+
+        self.flight_adj = [[] for i in range(self.m)]
+        for i in range(self.m):
+            flight = self.flight_adj_pri[i]
+            for next_flight in self.adj[flight.end_city]:
+                if next_flight.departure_time >= flight.arrival_time + 20:
+                    self.flight_adj[i].append(next_flight)
+
+               
         pass
     
     def least_flights_ealiest_route(self, start_city, end_city, t1, t2):
@@ -31,6 +54,7 @@ class Planner:
         min_time = float('inf')
         required_path = None
         que.append((0,source,FlightNode(None,None),t1)) #stops,curr_position,path[list],curr_time
+        visited[source] = True
         while not que.is_empty():
             curr = que.pop()
             stops = curr[0]
@@ -53,29 +77,53 @@ class Planner:
             # difficulty with get the minimun flight arrival time         
 
             if position == source :
-                required_flight = None
+                outgoing_cities = []
+                flights_used = [None] * self.m
                 for flight in self.adj[position]:
                     arrival_city = flight.end_city
+
                     if visited[arrival_city] or flight.arrival_time>t2:
                         continue
-                    new_path = FlightNode(flight,path)
-                    que.append((stops+1,flight.end_city,new_path,flight.arrival_time))
-                    visited[flight.end_city] = True 
+
+                    if flights_used[arrival_city] is None:
+                        outgoing_cities.append(flight.end_city)
+                        flights_used[arrival_city] = flight
+                    else:
+                        if flights_used[arrival_city].arrival_time > flight.arrival_time:
+                              flights_used[arrival_city] = flight
+
+                for outgoing_city in outgoing_cities:
+                    required_flight = flights_used[outgoing_city]              
+                    new_path = FlightNode(required_flight,path)
+                    que.append((stops+1,required_flight.end_city,new_path,flight.arrival_time))
+                    visited[required_flight.end_city] = True 
             else:
+                outgoing_cities = []
+                flights_used = [None] * self.m
                 for flight in self.adj[position]:
-                    if visited[arrival_city] or flight.arrival_time>t2:
+                    arrival_city = flight.end_city
+
+                    if visited[arrival_city] or flight.arrival_time>t2 or flight.departure_time < curr_time + 20:
                         continue
-                    if flight.departure_time<curr_time+20:
-                        continue
-                    new_path = FlightNode(flight,path)
-                    que.append((stops+1,flight.end_city,new_path,flight.arrival_time))   
-                    visited[flight.end_city] = True     
+
+                    if flights_used[arrival_city] is None:
+                        outgoing_cities.append(flight.end_city)
+                        flights_used[arrival_city] = flight
+                    else:
+                        if flights_used[arrival_city].arrival_time > flight.arrival_time:
+                              flights_used[arrival_city] = flight
+
+                for outgoing_city in outgoing_cities:
+                    required_flight = flights_used[outgoing_city]              
+                    new_path = FlightNode(required_flight,path)
+                    que.append((stops+1,required_flight.end_city,new_path,flight.arrival_time))
+                    visited[required_flight.end_city] = True  
         ans = []
-        while required_path is not None:
+        while required_path.curr is not None:
             ans.append(required_path.curr)
             required_path = required_path.prev
 
-        return ans     
+        return ans[::-1]    
     
     def cheapest_route(self, start_city, end_city, t1, t2):
         """
@@ -83,26 +131,67 @@ class Planner:
         arrives before t2 (<=) satisfying: 
         The route is a cheapest route
         """
-        heap = Heap()
+        
         source = start_city
         destination = end_city
-        distance_array = [float('inf')]*self.m
-        distance_array[source] = 0
-        heap.insert((0,source,t1)) #cost,position,time
-        while not heap.is_empty():
-            top = heap.extract()
-            cost = top[0]
-            postion = top[1]
-            curr_time = top[2]
 
-            if distance_array[postion] > cost:
-                continue
-            for flight in self.adj[postion]:
-                if curr_time + 20 < flight.departure_time:
+        # distance_array = [float('inf')]*self.m
+        # index_array = [len(flights) for flights in self.adj]
+        # distance_array[source] = 0
+        # heap.insert((0,source,t1,FlightNode(None,None))) #cost,position,time
+        # while not heap.is_empty():
+        #     top = heap.extract()
+        #     cost = top[0]
+        #     postion = top[1]
+        #     curr_time = top[2]
+
+        #     if distance_array[postion] > cost:
+        #         continue
+        #     for i in range(index_array):
+        #         flight = self.adj[i]
+        #         if curr_time + 20 < flight.departure_time or flight.arrival_time > t2:
+        #             continue
+        #         if cost + flight.fare < distance_array[flight.end_city]:
+        #             heap.insert()
+        # pass
+        overall_best_cost = float('inf')
+        overall_best_path = None
+        for start_flight in self.adj[source]:
+            best_cost = None
+            best_path = None
+            cost_array = [float('inf')] * self.m
+            cost_array[start_flight.flight_no] = 0
+            heap = Heap([])
+            heap.insert((start_flight.fare,start_flight,FlightNode(start_flight,None)))
+            while not heap.is_empty():
+                top = heap.extract()
+                cost = top[0]
+                path = top[2]
+                curr_flight = top[1]
+                if curr_flight.end_city == destination:
+                    if best_cost is None or cost < best_cost:
+                        best_cost = cost
+                        best_path = path
                     continue
-                if cost + flight.fare < distance_array[flight.end_city]:
-                    heap.insert
-        pass
+                for next_flight in self.flight_adj[curr_flight.flight_no]:
+                    if next_flight.arrival_time > t2:
+                        continue
+                    if cost + next_flight.fare < cost_array[next_flight.flight_no]:
+                        new_path = FlightNode(next_flight,path)
+                        heap.insert((cost+next_flight.fare,next_flight,new_path))
+            if best_cost is not None:
+                if best_cost < overall_best_cost:
+                    overall_best_cost = best_cost
+                    overall_best_path = best_path    
+
+        ans = []
+        while overall_best_path is not None:
+            ans.append(overall_best_path.curr)
+            overall_best_path = overall_best_path.prev
+
+        return ans[::-1]                    
+
+
     
     def least_flights_cheapest_route(self, start_city, end_city, t1, t2):
         """
@@ -142,13 +231,13 @@ class Planner:
             if position == source :
                 for flight in self.adj[position]:
                     arrival_city = flight.end_city
-                    if visited[arrival_city]:
+                    if visited[arrival_city] or flight.arrival_time > t2:
                         continue
                     new_path = FlightNode(flight,path)
                     que.append((stops+1,flight.end_city,new_path,flight.arrival_time))
             else:
                 for flight in self.adj[position]:
-                    if visited[arrival_city]:
+                    if visited[arrival_city] or flight.arrival_time > t2:
                         continue
                     if flight.departure_time<curr_time+20:
                         continue
