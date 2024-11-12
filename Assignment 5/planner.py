@@ -45,7 +45,8 @@ class Planner:
         The route has the least number of flights, and within routes with same number of flights, 
         arrives the earliest
         """
-        # curr_time = t1
+        if start_city == end_city:
+            return 
         source = start_city
         target = end_city
         visited = [False] * self.m
@@ -82,7 +83,7 @@ class Planner:
                 for flight in self.adj[position]:
                     arrival_city = flight.end_city
 
-                    if visited[arrival_city] or flight.arrival_time>t2:
+                    if visited[arrival_city] or flight.arrival_time>t2 or flight.departure_time < curr_time:
                         continue
 
                     if flights_used[arrival_city] is None:
@@ -131,6 +132,8 @@ class Planner:
         arrives before t2 (<=) satisfying: 
         The route is a cheapest route
         """
+        if start_city == end_city:
+            return 
         
         source = start_city
         destination = end_city
@@ -157,17 +160,21 @@ class Planner:
         overall_best_cost = float('inf')
         overall_best_path = None
         for start_flight in self.adj[source]:
-            best_cost = None
+            if start_flight.departure_time<t1:
+                continue
+            best_cost = float('inf')
             best_path = None
             cost_array = [float('inf')] * self.m
             cost_array[start_flight.flight_no] = 0
-            heap = Heap([])
+            heap = Heap([],comp1)
             heap.insert((start_flight.fare,start_flight,FlightNode(start_flight,None)))
             while not heap.is_empty():
                 top = heap.extract()
                 cost = top[0]
                 path = top[2]
                 curr_flight = top[1]
+                if cost > best_cost:
+                    continue
                 if curr_flight.end_city == destination:
                     if best_cost is None or cost < best_cost:
                         best_cost = cost
@@ -179,7 +186,7 @@ class Planner:
                     if cost + next_flight.fare < cost_array[next_flight.flight_no]:
                         new_path = FlightNode(next_flight,path)
                         heap.insert((cost+next_flight.fare,next_flight,new_path))
-            if best_cost is not None:
+            if best_cost!=float('inf'):
                 if best_cost < overall_best_cost:
                     overall_best_cost = best_cost
                     overall_best_path = best_path    
@@ -201,58 +208,65 @@ class Planner:
         is the cheapest
         """
         source = start_city
-        target = end_city
-        visited = [False] * self.m
-        que = Queue()
-        min_stops = float('inf') #change this
-        min_time = float('inf')
-        required_path = []
-        que.append((0,source,FlightNode(None,None),t1)) #stops,curr_position,path[list],curr_time
-        while not que.is_empty():
-            curr = que.pop()
-            stops = curr[0]
-            position = curr[1]
-            path = curr[2]
-            curr_time = curr[3]
-            if stops > min_stops:
-                continue
-            if position == target:
-                if stops < min_stops:
-                    required_path = path
-                    min_time = curr_time
-                    min_stops = stops
-                if stops == min_stops:    
-                    if curr_time < min_time:
-                        required_path = path
-                        min_time = curr_time
-                continue
-                    
+        destination = end_city
 
-            if position == source :
-                for flight in self.adj[position]:
-                    arrival_city = flight.end_city
-                    if visited[arrival_city] or flight.arrival_time > t2:
+        if start_city == end_city:
+            return 
+
+        overall_best_stop = float('inf')
+        overall_best_path = None
+
+        for start_flight in self.adj[source]:
+            if start_flight.departure_time<t1:
+                continue
+            best_stop = float('inf')
+            best_path = None
+            cost_array = [float('inf')] * self.m
+            cost_array[start_flight.flight_no] = 0
+            heap = Heap([],comp2)
+            heap.insert((0,start_flight.fare,start_flight,FlightNode(start_flight,None)))
+            while not heap.is_empty():
+                top = heap.extract()
+                stops = top[0]
+                cost = top[1]
+                path = top[3]
+                curr_flight = top[2]
+                if cost > best_stop:
+                    continue
+                if curr_flight.end_city == destination:
+                    if best_stop is None or stops < best_stop:
+                        best_stop = stops
+                        best_path = path
+                    if best_stop == stops:
+                        best_path = path    
+                    continue
+
+                for next_flight in self.flight_adj[curr_flight.flight_no]:
+                    if next_flight.arrival_time > t2:
                         continue
-                    new_path = FlightNode(flight,path)
-                    que.append((stops+1,flight.end_city,new_path,flight.arrival_time))
-            else:
-                for flight in self.adj[position]:
-                    if visited[arrival_city] or flight.arrival_time > t2:
-                        continue
-                    if flight.departure_time<curr_time+20:
-                        continue
-                    new_path = FlightNode(flight,path)
-                    que.append((stops+1,flight.end_city,new_path,flight.arrival_time))        
+                    if cost + next_flight.fare < cost_array[next_flight.flight_no]:
+                        new_path = FlightNode(next_flight,path)
+                        heap.insert((stops+1,cost+next_flight.fare,next_flight,new_path))
+            if best_stop!=float('inf'):
+                if best_stop < overall_best_stop:
+                    overall_best_stop = best_stop
+                    overall_best_path = best_path 
+                if best_stop == overall_best_stop:
+                    overall_best_path = best_path       
+
         ans = []
-        while required_path is not None:
-            ans.append(required_path.curr)
-            required_path = required_path.prev
+        while overall_best_path is not None:
+            ans.append(overall_best_path.curr)
+            overall_best_path = overall_best_path.prev
 
-        return ans 
-        pass
+        return ans[::-1] 
 
 
 class FlightNode:
     def __init__(self,curr,prev):
         self.curr = curr
         self.prev = prev 
+def comp1(a,b):
+    return a[0]<b[0]
+def comp2(a,b):
+    return (a[0],a[1])<(b[0],b[1])

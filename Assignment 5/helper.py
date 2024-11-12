@@ -3,7 +3,7 @@ class Heap:
     Class to implement a heap with general comparison function
     '''
     
-    def __init__(self, init_array):
+    def __init__(self, init_array,comparison):
         '''
         Arguments:
             comparison_function : function : A function that takes in two arguments and returns a boolean value
