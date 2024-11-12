@@ -13,16 +13,7 @@ class Planner:
         for flight in flights:
             idx = flight.start_city
             self.adj[idx].append(flight)
-        
-
-
-
-        """check for sorting"""  
-
-        # for i in range(self.m):
-        #     self.adj[i] = sorted(self.adj[i],key=lambda x : x.arrival_time)
-
-        # creating a graph of flights as a node 
+    
         self.flight_adj_pri = [None] * self.m
         for flight in flights:
             idx = flight.flight_no
@@ -120,6 +111,8 @@ class Planner:
                     que.append((stops+1,required_flight.end_city,new_path,flight.arrival_time))
                     visited[required_flight.end_city] = True  
         ans = []
+        if required_path is None:
+            return []
         while required_path.curr is not None:
             ans.append(required_path.curr)
             required_path = required_path.prev
