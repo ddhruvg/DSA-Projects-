@@ -1,0 +1,21 @@
+Least flights least time:
+  Flight No: 2, From: 0 To: 3, Departure: 15, Arrival: 40, Fare: 20
+  Flight No: 9, From: 3 To: 5, Departure: 90, Arrival: 120, Fare: 45
+  Total Time: 55 minutes
+  Total Fare: 65
+  Number of Flights: 2
+
+Least flights cheapest fare:
+  Flight No: 2, From: 0 To: 3, Departure: 15, Arrival: 40, Fare: 20
+  Flight No: 9, From: 3 To: 5, Departure: 90, Arrival: 120, Fare: 45
+  Total Time: 55 minutes
+  Total Fare: 65
+  Number of Flights: 2
+
+Overall cheapest:
+  Flight No: 2, From: 0 To: 3, Departure: 15, Arrival: 40, Fare: 20
+  Flight No: 9, From: 3 To: 5, Departure: 90, Arrival: 120, Fare: 45
+  Total Time: 55 minutes
+  Total Fare: 65
+  Number of Flights: 2
+
