@@ -161,7 +161,7 @@ def main():
     flight_planner2 = Planner(flights2)
 
     # The three tasks
-    route1 = flight_planner1.least_flights_ealiest_route(0,2,0,1000)
+    route1 = flight_planner1.least_flights_earliest_route(0,2,0,1000)
     route2 = flight_planner1.cheapest_route(0,2,0,1000)
     route3 = flight_planner1.least_flights_cheapest_route(0,2,0,1000)
     paths = find_optimized_paths(flights3,0,2,0,1000)
@@ -200,7 +200,7 @@ def main():
             print(ok.flight_no)     
         
 
-    route1 = flight_planner2.least_flights_ealiest_route(0,5,0,1000)
+    route1 = flight_planner2.least_flights_earliest_route(0,5,0,1000)
     route2 = flight_planner2.cheapest_route(0,5,0,1000)
     route3 = flight_planner2.least_flights_cheapest_route(0,5,0,1000)
     paths = find_optimized_paths(flights2,0,5,0,1000)

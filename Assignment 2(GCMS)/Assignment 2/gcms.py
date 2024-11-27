@@ -20,12 +20,7 @@ class GCMS:
 
         self.bins_id=self.AVLTree.insert(self.bins_id,key_id)
         self.bins_cap=self.AVLTree.mul_key_insert(self.bins_cap,key_cap)
-        # if self.bins_cap:
-        #     print(self.bins_cap.key)
-        # else:
-        #     print("BT")
-        # print("bin added with key ",key_cap)
-        pass
+   
 
     def add_object(self, object_id, size, color):
         # here color will be passed as an integer to the object
@@ -70,9 +65,8 @@ class GCMS:
         self.bins_cap = self.AVLTree.mul_key_insert(node=self.bins_cap,key=new_key_cap)
         object_key = (object_id,object,bin_id)
         self.objects_tree = self.AVLTree.insert(node=self.objects_tree,key=object_key)
-        # print("object added with id ",object_key)
-        # handel the below exception
-        # raise NoBinFoundException
+
+
 
     def delete_object(self, object_id):
         # Implement logic to remove an object from its bin
@@ -99,7 +93,7 @@ class GCMS:
         capacity = bin_node.key[1]
         bin_id = bin_node.key[0]
         return (bin.capacity,bin.show_objects())
-        # return (bin.capacity,bin.cargos)
+    
         pass
 
     def object_info(self, object_id):

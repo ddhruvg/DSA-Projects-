@@ -1,5 +1,5 @@
 from flight import Flight
-from helper import Heap,Queue
+from helper import Queue, Heap
 
 class Planner:
     def __init__(self, flights):
@@ -156,6 +156,8 @@ class Planner:
                 for next_flight in self.flight_adj[curr_flight.flight_no]:
                     if next_flight.arrival_time > t2:
                         continue
+                    if cost + next_flight.fare > best_cost:
+                        continue
                     if cost + next_flight.fare <= cost_array[next_flight.flight_no]:
                         new_path = FlightNode(next_flight,path)
                         cost_array[next_flight.flight_no] = cost + next_flight.fare
@@ -170,7 +172,9 @@ class Planner:
             ans.append(overall_best_path.curr)
             overall_best_path = overall_best_path.prev
 
-        return ans[::-1]                    
+        return ans[::-1]     
+
+            
 
 
     
@@ -226,6 +230,11 @@ class Planner:
                 for next_flight in self.flight_adj[curr_flight.flight_no]:
                     if next_flight.arrival_time > t2:
                         continue
+                    if stops + 1 > best_stop:
+                        continue
+                    if stops+1 == best_stop:
+                        if cost + next_flight.fare > best_cost:
+                            continue
                     if cost + next_flight.fare <= cost_array[next_flight.flight_no]:
                         new_path = FlightNode(next_flight,path)
                         cost_array[next_flight.flight_no] = cost + next_flight.fare
